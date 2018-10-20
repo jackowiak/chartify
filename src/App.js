@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {Button} from 'reactstrap';
 import axios from 'axios';
+import ArtistsChart from './ArtistsChart';
+import TracksChart from './TracksChart';
 const queryString = require('query-string');
 
 const types = {artists: 'artists', tracks: 'tracks'};
@@ -13,29 +15,34 @@ class App extends Component {
     this.state = {
       type: types.artists,
       range: ranges.shortTerm,
-      payload: [],
+      payload: {
+        charts: {
+          artists: [],
+          tracks: []
+        },
+        artistOverview: []
+      },
       connectedWithSpotify: false
     };
   }
 
   componentDidMount() {
-    if (this.state.loaded) this.fetchData();
+    if (this.state.connectedWithSpotify) this.fetchTopChart();
   }
 
   logSpotify = () => {
     window.location = "http://localhost:8888/login";
-    this.setState({connectedWithSpotify: true})
   }
 
   handleType = type => {
-    this.setState({type: type}, () => this.fetchData());
+    this.setState({type: type}, () => this.fetchTopChart());
   }
 
   handleRange = range => {
-    this.setState({range: range}, () => this.fetchData());
+    this.setState({range: range}, () => this.fetchTopChart());
   }
 
-  fetchData = () => {
+  fetchTopChart = () => {
     const parsed = queryString.parse(window.location.search);
     const accessToken = parsed.access_token;
     const API_CALL = `https://api.spotify.com/v1/me/top/${this.state.type}?time_range=${this.state.range}`;
@@ -43,8 +50,35 @@ class App extends Component {
     axios.get(API_CALL, {
       headers: { 'Authorization': 'Bearer ' + accessToken }
     }).then(data => {
-      this.setState({payload: data.data.items}, () => console.log(data))
+      this.setState({
+        payload: {
+          ...this.state.payload,
+          charts: {
+            artists: this.state.type === "artists" ? data.data.items : [],
+            tracks: this.state.type === "tracks" ? data.data.items : []
+          }
+        },
+        connectedWithSpotify: true
+      }, () => console.log(this.state.payload))
     });
+  }
+
+  fetchArtistsData = (id) => {
+    const parsed = queryString.parse(window.location.search);
+    const accessToken = parsed.access_token;
+    const artists_id = id;
+    const API_CALL = `https://api.spotify.com/v1/artists/${artists_id}/albums?include_groups=appears_on`;
+
+    axios.get(API_CALL, {
+      headers: { 'Authorization': 'Bearer ' + accessToken }
+    }).then(data => {
+      this.setState({
+        payload: {
+          ...this.state.payload,
+          artistOverview: data.data
+        }
+      })
+    })
   }
 
   render() {
@@ -61,12 +95,11 @@ class App extends Component {
           <li><Button onClick={range => this.handleRange(ranges.longTerm)}>Long</Button></li>
         </ul>
         {
-          this.state.payload ?
-          this.state.payload.map((track, i) => {
-            return (
-              <div key={i}>{track.name}</div>
-            )
-          })
+          (this.state.connectedWithSpotify) ?
+            (this.state.type === 'artists') ?
+            <ArtistsChart chart={this.state.payload.charts.artists} fetchArtistsData={this.fetchArtistsData} />
+            :
+            <TracksChart chart={this.state.payload.charts.tracks} />
           :
           null
         }
