@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
-import {Button} from 'reactstrap';
-import axios from 'axios';
-import ArtistsChart from './ArtistsChart';
-import TracksChart from './TracksChart';
-const queryString = require('query-string');
 
-const types = {artists: 'artists', tracks: 'tracks'};
-const ranges = {shortTerm: 'short_term', mediumTerm: 'medium_term', longTerm: 'long_term'};
+import { Container, Row, Col, Button } from 'reactstrap';
+import axios from 'axios';
+
+import ArtistsChart from './components/ArtistsChart';
+import TracksChart from './components/TracksChart';
+import ArtistsOverview from './components/ArtistsOverview';
+import Login from './components/Login';
+
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+
+const queryString = require('query-string');
+const types = { artists: 'artists', tracks: 'tracks' };
+const ranges = { shortTerm: 'short_term', mediumTerm: 'medium_term', longTerm: 'long_term' };
 
 class App extends Component {
   constructor(props) {
@@ -20,10 +26,28 @@ class App extends Component {
           artists: [],
           tracks: []
         },
-        artistOverview: []
+        artistsOverview: {
+          features: [],
+          overview: [],
+          active: false
+        }
       },
-      connectedWithSpotify: false
+      connectedWithSpotify: false,
+      rangeDropdownOpen: false,
+      typeDropdownOpen: false
     };
+  }
+
+  toggleRange = () => {
+    this.setState(prevState => ({
+      rangeDropdownOpen: !prevState.rangeDropdownOpen
+    }));
+  }
+
+  toggleType = () => {
+    this.setState(prevState => ({
+      typeDropdownOpen: !prevState.typeDropdownOpen
+    }));
   }
 
   componentDidMount() {
@@ -35,11 +59,11 @@ class App extends Component {
   }
 
   handleType = type => {
-    this.setState({type: type}, () => this.fetchTopChart());
+    this.setState({ type: type }, () => this.fetchTopChart());
   }
 
   handleRange = range => {
-    this.setState({range: range}, () => this.fetchTopChart());
+    this.setState({ range: range }, () => this.fetchTopChart());
   }
 
   fetchTopChart = () => {
@@ -75,35 +99,85 @@ class App extends Component {
       this.setState({
         payload: {
           ...this.state.payload,
-          artistOverview: data.data
+          artistsOverview: {
+            ...this.state.payload.artistsOverview,
+            features: data.data
+          }
         }
       })
-    })
+    });
+
+    const API_CALL_2 = `https://api.spotify.com/v1/artists/${artists_id}`;
+
+    axios.get(API_CALL_2, {
+      headers: { 'Authorization': 'Bearer ' + accessToken }
+    }).then(data => {
+      this.setState({
+        payload: {
+          ...this.state.payload,
+          artistsOverview: {
+            ...this.state.payload.artistsOverview,
+            overview: data.data,
+            active: true
+          }
+        }
+      })
+    });
   }
 
   render() {
     return (
-      <div>
-        <Button onClick={this.logSpotify}>Log in to Spotify!</Button>
-        <ul>
-          <li><Button onClick={type => this.handleType(types.artists)}>{types.artists}</Button></li>
-          <li><Button onClick={type => this.handleType(types.tracks)}>{types.tracks}</Button></li>
-        </ul>
-        <ul>
-          <li><Button onClick={range => this.handleRange(ranges.shortTerm)}>Short</Button></li>
-          <li><Button onClick={range => this.handleRange(ranges.mediumTerm)}>Medium</Button></li>
-          <li><Button onClick={range => this.handleRange(ranges.longTerm)}>Long</Button></li>
-        </ul>
+      <Container>
         {
-          (this.state.connectedWithSpotify) ?
-            (this.state.type === 'artists') ?
-            <ArtistsChart chart={this.state.payload.charts.artists} fetchArtistsData={this.fetchArtistsData} />
+          this.state.connectedWithSpotify ?
+            <Login logSpotify={this.logSpotify} />
             :
-            <TracksChart chart={this.state.payload.charts.tracks} />
-          :
-          null
+            <div>
+              <Dropdown isOpen={this.state.rangeDropdownOpen} toggle={this.toggleRange}>
+                <DropdownToggle caret>
+                  Range
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={range => this.handleRange(ranges.longTerm)}>Long</DropdownItem>
+                  <DropdownItem onClick={range => this.handleRange(ranges.mediumTerm)}>Medium</DropdownItem>
+                  <DropdownItem onClick={range => this.handleRange(ranges.shortTerm)}>Short</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+
+              <Dropdown isOpen={this.state.typeDropdownOpen} toggle={this.toggleType}>
+                <DropdownToggle caret>
+                  Type
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={type => this.handleType(types.artists)}>Artist</DropdownItem>
+                  <DropdownItem onClick={type => this.handleType(types.tracks)}>Track</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+              {
+                (this.state.connectedWithSpotify) ?
+                  (this.state.type === 'artists') ?
+                    <ArtistsChart
+                      chart={this.state.payload.charts.artists}
+                      fetchArtistsData={this.fetchArtistsData}
+                      artistsOverview={this.state.payload.artistsOverview}
+                    />
+                    :
+                    <TracksChart
+                      chart={this.state.payload.charts.tracks}
+                    />
+                  :
+                  null
+              }
+
+              {
+                this.state.payload.artistsOverview.active ?
+                  <ArtistsOverview artistsOverview={this.state.payload.artistsOverview} />
+                  :
+                  null
+              }
+            </div>
         }
-      </div>
+      </Container>
     );
   }
 }
