@@ -1,25 +1,33 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { Row, Col } from 'reactstrap';
 
 export default class ArtistsChart extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  showId = (id) => {
-    this.props.fetchArtistsData(id);
-  }
 
   render() {
     return (
-      <div>
-        {
-          this.props.chart.map((c, i) => {
-            return (
-              <div key={i} onClick={() => this.showId(c.id)}>{c.name}</div>
-            )
-          })
-        }
-      </div>
+      <Row>
+        <Col md={{ size: 6, offset: 3 }}>
+          {
+            this.props.payload.map((x, i) => {
+              return (
+                <Row key={i} className="artist-profile">
+                  <Col md={{ size: 4 }} className="pics">
+                    <div className="image-container">
+                      <img src={x.images[2].url} />
+                    </div>
+                  </Col>
+                  <Col md={{ size: 8 }}>
+                    <Row className="artist-profile-name">{`${i + 1}.`}{x.name}</Row>
+                    <Row className="artist-profile-genres">
+                      {(x.genres.filter((y, j) => j < 2)).join(', ')}
+                    </Row>
+                  </Col>
+                </Row>
+              )
+            })
+          }
+        </Col>
+      </Row >
     )
   }
 }

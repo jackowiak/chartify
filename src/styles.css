@@ -2,3 +2,40 @@
     height: 100vh;
     text-align: center;
 }
+
+.selectors {
+    margin: 40px 0px;
+}
+
+.artist-profile, .tracks-profile {
+    border-bottom: 2px solid #007bff;
+    padding: 40px;
+}
+
+.artist-profile-name, .tracks-profile-name {
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 1.4px;
+    padding: 5px;
+}
+
+.artist-profile-genres, .tracks-profile-artist {
+    color: #A0A0A0;
+    font-size: 14px;
+    margin-left: 10px;
+    padding: 5px;
+}
+
+.pics {
+    text-align: center;
+}
+
+.image-container {
+    width: 100px;
+    height: 100px;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+}
