@@ -8,8 +8,13 @@
     padding-top: 80px;
 }
 
+.title {
+  margin: 40px 0px;
+  text-align: center;
+}
+
 .selectors {
-    margin: 40px 0px;
+    margin-bottom: 20px;
 }
 
 .artist-profile, .tracks-profile {

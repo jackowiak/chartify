@@ -101,6 +101,11 @@ class App extends Component {
             :
             <Row>
               <Col>
+                <Row>
+                  <Col xs={{ size: 6, offset: 3 }} className="title" >
+                    <h4>Your favourite artists and tracks on Spotify</h4>
+                  </Col>
+                </Row>
                 <Row className="selectors">
                   <Col xs={{ size: 1, offset: 5 }}>
                     <Dropdown isOpen={this.state.rangeDropdownOpen} toggle={this.toggleRange}>
@@ -108,9 +113,9 @@ class App extends Component {
                         Range
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem onClick={() => this.fetchTopChartByRange(ranges.longTerm)}>Long</DropdownItem>
-                        <DropdownItem onClick={() => this.fetchTopChartByRange(ranges.mediumTerm)}>Medium</DropdownItem>
-                        <DropdownItem onClick={() => this.fetchTopChartByRange(ranges.shortTerm)}>Short</DropdownItem>
+                        <DropdownItem onClick={() => this.fetchTopChartByRange(ranges.shortTerm)}>Last month</DropdownItem>
+                        <DropdownItem onClick={() => this.fetchTopChartByRange(ranges.mediumTerm)}>Last 6 months</DropdownItem>
+                        <DropdownItem onClick={() => this.fetchTopChartByRange(ranges.longTerm)}>All time</DropdownItem>
                       </DropdownMenu>
                     </Dropdown>
                   </Col>
