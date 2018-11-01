@@ -1,9 +1,13 @@
 import React from 'react';
 
-export const Loader = props => {
+import { Row, Col } from 'reactstrap';
+
+export const Loader = () => {
   return (
-    <div>
-      Loading...
-    </div>
+    <Row className="loader align-items-center">
+      <Col xs={{ size: 6, offset: 3 }}>
+        <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+      </Col>
+    </Row>
   )
 }

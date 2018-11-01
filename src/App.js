@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 
-import { Container, Row, Col, Button } from 'reactstrap';
+import { Container, Row, Col, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import axios from 'axios';
 
 import ArtistsChart from './components/ArtistsChart';
 import TracksChart from './components/TracksChart';
 import Login from './components/Login';
-
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Loader } from './extras/Loader';
 
 const queryString = require('query-string');
 const types = { artists: 'artists', tracks: 'tracks' };
@@ -23,7 +22,8 @@ class App extends Component {
       payload: [],
       connectedWithSpotify: false,
       rangeDropdownOpen: false,
-      typeDropdownOpen: false
+      typeDropdownOpen: false,
+      loading: false
     };
   }
 
@@ -52,29 +52,43 @@ class App extends Component {
     window.location = "http://localhost:8888/login";
   }
 
+  loading = () => {
+    setTimeout(() => {
+      this.setState({ loading: false })
+    }, 900)
+  }
+
   fetchTopChartByType = type => {
-    const parsed = queryString.parse(window.location.search);
-    const accessToken = parsed.access_token;
+    this.setState({ loading: true }, () => {
+      this.loading();
 
-    const API_CALL = `https://api.spotify.com/v1/me/top/${type}?time_range=${this.state.range}`;
+      const parsed = queryString.parse(window.location.search);
+      const accessToken = parsed.access_token;
 
-    axios.get(API_CALL, {
-      headers: { 'Authorization': 'Bearer ' + accessToken }
-    }).then(data => {
-      this.setState({ type, payload: data.data.items })
+      const API_CALL = `https://api.spotify.com/v1/me/top/${type}?time_range=${this.state.range}`;
+
+      axios.get(API_CALL, {
+        headers: { 'Authorization': 'Bearer ' + accessToken }
+      }).then(data => {
+        this.setState({ type, payload: data.data.items })
+      });
     });
   }
 
   fetchTopChartByRange = range => {
-    const parsed = queryString.parse(window.location.search);
-    const accessToken = parsed.access_token;
+    this.setState({ loading: true }, () => {
+      this.loading();
 
-    const API_CALL = `https://api.spotify.com/v1/me/top/${this.state.type}?time_range=${range}`;
+      const parsed = queryString.parse(window.location.search);
+      const accessToken = parsed.access_token;
 
-    axios.get(API_CALL, {
-      headers: { 'Authorization': 'Bearer ' + accessToken }
-    }).then(data => {
-      this.setState({ range, payload: data.data.items })
+      const API_CALL = `https://api.spotify.com/v1/me/top/${this.state.type}?time_range=${range}`;
+
+      axios.get(API_CALL, {
+        headers: { 'Authorization': 'Bearer ' + accessToken }
+      }).then(data => {
+        this.setState({ range, payload: data.data.items })
+      });
     });
   }
 
@@ -88,7 +102,7 @@ class App extends Component {
             <Row>
               <Col>
                 <Row className="selectors">
-                  <Col md={{ size: 1, offset: 5 }}>
+                  <Col xs={{ size: 1, offset: 5 }}>
                     <Dropdown isOpen={this.state.rangeDropdownOpen} toggle={this.toggleRange}>
                       <DropdownToggle caret color="primary">
                         Range
@@ -100,7 +114,7 @@ class App extends Component {
                       </DropdownMenu>
                     </Dropdown>
                   </Col>
-                  <Col md={{ size: 1 }}>
+                  <Col xs={{ size: 1 }}>
                     <Dropdown isOpen={this.state.typeDropdownOpen} toggle={this.toggleType}>
                       <DropdownToggle caret color="primary">
                         Type
@@ -114,6 +128,9 @@ class App extends Component {
                 </Row>
                 {
                   this.state.type && this.state.range &&
+                    this.state.loading ?
+                    <Loader />
+                    :
                     this.state.type === types.artists ?
                       <ArtistsChart payload={this.state.payload} />
                       :
