@@ -17,7 +17,7 @@ class App extends Component {
   }
 
   logSpotify = () => {
-    window.location = "http://localhost:8888/login";
+    window.location = "http://localhost:8888/loginchuj";
   }
 
   render() {
