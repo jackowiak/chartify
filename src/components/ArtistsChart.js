@@ -17,7 +17,7 @@ export default class ArtistsChart extends Component {
                     </div>
                   </Col>
                   <Col xs={{ size: 8 }}>
-                    <Row className="artist-profile-name">{`${i + 1}.`}{x.name}</Row>
+                    <Row className="artist-profile-name">{`${i + 1}. `}{x.name}</Row>
                     <Row className="artist-profile-genres">
                       {(x.genres.filter((y, j) => j < 2)).join(', ')}
                     </Row>

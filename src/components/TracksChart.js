@@ -17,7 +17,7 @@ export default class TracksChart extends Component {
                     </div>
                   </Col>
                   <Col xs={{ size: 8 }}>
-                    <Row className="tracks-profile-name">{`${i + 1}.`}{x.name}</Row>
+                    <Row className="tracks-profile-name">{`${i + 1}. `}{x.name}</Row>
                     <Row className="tracks-profile-artist">{x.artists[0].name}</Row>
                   </Col>
                 </Row>
