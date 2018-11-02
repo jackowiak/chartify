@@ -49,7 +49,7 @@ class App extends Component {
   }
 
   logSpotify = () => {
-    window.location = "http://localhost:8888/login";
+    window.location = "https://mybackend-chartify-dt.herokuapp.com/login";
   }
 
   loading = () => {
