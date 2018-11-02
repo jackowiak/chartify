@@ -49,7 +49,8 @@ class App extends Component {
   }
 
   logSpotify = () => {
-    window.location = "https://mybackend-chartify-dt.herokuapp.com/login";
+    let newish = window.location = window.location.href.includes('localhost') ? 'http://localhost:8888/login' : 'https://better-playlists-backend.herokuapp.com/login';
+    window.location = newish;
   }
 
   loading = () => {
