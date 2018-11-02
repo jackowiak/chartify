@@ -102,7 +102,7 @@ class App extends Component {
             :
             <Row>
               <Col>
-                <Row>
+                <Row className="header">
                   <Col xs={{ size: 6, offset: 3 }} className="title" >
                     <h4>Your favourite artists and tracks on Spotify</h4>
                   </Col>

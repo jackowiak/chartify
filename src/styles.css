@@ -13,6 +13,11 @@
   text-align: center;
 }
 
+.header {
+  margin: auto;
+  text-align: center;
+}
+
 .selectors {
     margin-bottom: 20px;
 }

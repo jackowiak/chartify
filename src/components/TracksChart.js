@@ -13,7 +13,7 @@ export default class TracksChart extends Component {
                 <Row key={i} className="tracks-profile">
                   <Col xs={{ size: 4 }} className="pics">
                     <div className="image-container">
-                      <img src={x.album.images[2].url} />
+                      <img src={x.album.images[2].url} alt="artist" />
                     </div>
                   </Col>
                   <Col xs={{ size: 8 }}>

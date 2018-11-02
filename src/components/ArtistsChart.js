@@ -13,7 +13,7 @@ export default class ArtistsChart extends Component {
                 <Row key={i} className="artist-profile">
                   <Col xs={{ size: 4 }} className="pics">
                     <div className="image-container">
-                      <img src={x.images[2].url} />
+                      <img src={x.images[2].url} alt="artist" />
                     </div>
                   </Col>
                   <Col xs={{ size: 8 }}>
