@@ -20,8 +20,5 @@
   <p><code>$ npm install </code></p>
   <p><code>$ cd chartify </code></p>
   <h5>Server side</h5>
-  <p><code>$ git clone https://github.com/jackowiak/chartify.git</code></p>
-  <p><code>$ cd chartify </code></p>
-  <p><code>$ npm install </code></p>
-  <p><code>$ cd chartify </code></p>
+  <p>To use server-side, check another repo</p>
 </div>
