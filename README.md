@@ -18,7 +18,7 @@
   <p><code>$ git clone https://github.com/jackowiak/chartify.git</code></p>
   <p><code>$ cd chartify </code></p>
   <p><code>$ npm install </code></p>
-  <p><code>$ cd chartify </code></p>
+  <p><code>$ npm start</code></p>
   <h5>Server side</h5>
   <p>To use server-side, check this repo: https://github.com/jackowiak/chartify-backend</p>
 </div>
