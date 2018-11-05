@@ -7,7 +7,7 @@
 
 <div>
   <h3>Stack</h3>
-  <p>ES6, ReactJS, React-Router v4, Reactstrap, NodeJS, ExpressJS.</p>
+  <p>ES6, ReactJS, React-Router v4, Reactstrap.</p>
 </div>
 
 <hr />
@@ -20,5 +20,5 @@
   <p><code>$ npm install </code></p>
   <p><code>$ cd chartify </code></p>
   <h5>Server side</h5>
-  <p>To use server-side, check another repo</p>
+  <p>To use server-side, check this repo: https://github.com/jackowiak/chartify-backend</p>
 </div>
