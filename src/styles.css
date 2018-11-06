@@ -23,6 +23,11 @@
     padding: 40px;
 }
 
+.artist-profile:last-child, .tracks-profile:last-child {
+  border-bottom: 0px;
+  padding: 40px;
+}
+
 .artist-profile-name, .tracks-profile-name {
     font-size: 18px;
     font-weight: bold;
